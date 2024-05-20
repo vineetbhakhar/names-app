@@ -1,0 +1,82 @@
+[
+	{
+	"name": "Emily",
+	"gender": "Female",
+	"languages": ["English"],
+	"meaning": "Derived from the Roman name Aemilia, which was likely based on the Latin word 'aemulus' meaning 'rival' or 'eager'. It became a popular name in the Middle Ages and has remained so ever since.",
+	"origin": "Germanic",
+	"qualities": ["Ambitious", "Curious", "Dependable"]
+	},
+	{
+	"name": "Lucas",
+	"gender": "Male",
+	"languages": ["English", "Latin"],
+	"meaning": "Derived from the ancient Roman name Lucius, which was derived from the Latin word 'lux' meaning 'light'. It has been a popular name since the Middle Ages, especially after the apostle Luke in the New Testament.",
+	"origin": "Latin",
+	"qualities": ["Confident", "Innovative", "Adventurous"]
+	},
+	{
+	"name": "Olivia",
+	"gender": "Female",
+	"languages": ["English", "Italian"],
+	"meaning": "Derived from the Latin word 'oliva' meaning 'olive tree'. It became a popular name in the 17th century, likely due to its association with the olive, a symbol of peace and prosperity.",
+	"origin": "Latin",
+	"qualities": ["Gentle", "Nurturing", "Elegant"]
+	},
+	{
+	"name": "Ethan",
+	"gender": "Male",
+	"languages": ["English", "Hebrew"],
+	"meaning": "Derived from the Hebrew name 'Ethan' meaning 'firm, strong, enduring'. It was a popular biblical name in the Old Testament and has remained a common name in the English-speaking world.",
+	"origin": "Hebrew",
+	"qualities": ["Resilient", "Dependable", "Honest"]
+	},
+	{
+	"name": "Isabella",
+	"gender": "Female",
+	"languages": ["English", "Spanish", "Italian"],
+	"meaning": "Derived from the Hebrew name 'Elisheba' meaning 'devoted to God'. It became a popular name in Europe during the Middle Ages, particularly after the 13th-century Spanish queen Isabella I.",
+	"origin": "Italian",
+	"qualities": ["Empathetic", "Thoughtful", "Joyful"]
+	},
+	{
+	"name": "William",
+	"gender": "Male",
+	"languages": ["English", "German"],
+	"meaning": "Derived from the Germanic name 'Wilhelm', which was composed of the elements 'wil' meaning 'will, desire' and 'helm' meaning 'helmet, protection'. It became a popular name in England after the Norman Conquest in 1066.",
+	"origin": "Germanic",
+	"qualities": ["Ambitious", "Confident", "Passionate"]
+	},
+	{
+	"name": "Sophia",
+	"gender": "Female",
+	"languages": ["English", "Greek"],
+	"meaning": "Derived from the Greek word 'sophia' meaning 'wisdom'. It was a popular name in the Byzantine Empire and has remained a favorite in the English-speaking world.",
+	"origin": "Greek",
+	"qualities": ["Curious", "Thoughtful", "Elegant"]
+	},
+	{
+	"name": "Noah",
+	"gender": "Male",
+	"languages": ["English", "Hebrew"],
+	"meaning": "Derived from the Hebrew name 'Noach' meaning 'rest, comfort'. It is a biblical name, most famously associated with the hero of the Great Flood story in the Book of Genesis.",
+	"origin": "Hebrew",
+	"qualities": ["Gentle", "Dependable", "Nurturing"]
+	},
+	{
+	"name": "Emma",
+	"gender": "Female",
+	"languages": ["English", "German"],
+	"meaning": "Derived from the Germanic name 'Imma' or 'Emm', which may have been a short form of names beginning with the element 'ermen' meaning 'whole, universal'. It became a popular name in England in the 11th century.",
+	"origin": "Germanic",
+	"qualities": ["Joyful", "Empathetic", "Ambitious"]
+	},
+	{
+	"name": "Jacob",
+	"gender": "Male",
+	"languages": ["English", "Hebrew"],
+	"meaning": "Derived from the Hebrew name 'Ya'aqov' meaning 'supplanter' or 'to follow'. It is a biblical name, associated with the twin brother of Esau and the father of the Twelve Tribes of Israel.",
+	"origin": "Hebrew",
+	"qualities": ["Resilient", "Innovative", "Passionate"]
+	}
+	]
