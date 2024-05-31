@@ -6,33 +6,36 @@ interface LanguageMultiSelectProps {
 	onLanguagesSelect: (languages: string[]) => void;
 }
 
+const allLanguages = [
+	{ id: "english", value: "English", label: "English" },
+	{ id: "latin", value: "Latin", label: "Latin" },
+	// ... other language options
+];
+
 const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
 	selectedLanguages,
 	onLanguagesSelect,
 }) => {
-	const allLanguages = ['English', 'Latin', 'Italian', 'Spanish', 'Greek', 'Hebrew', 'German'];
-
 	const handleLanguageSelect = (event: ChangeEvent<HTMLInputElement>) => {
 		const { value, checked } = event.target;
-		if (checked) {
-			onLanguagesSelect([...selectedLanguages, value]);
-		} else {
-			onLanguagesSelect(selectedLanguages.filter((lang) => lang !== value));
-		}
+		onLanguagesSelect(
+			checked
+				? [...selectedLanguages, value]
+				: selectedLanguages.filter((lang) => lang !== value)
+		);
 	};
 
 	return (
 		<div>
 			{allLanguages.map((language) => (
-				<label key={language} >
+				<label key={language.id}>
 					<input
 						type="checkbox"
-						id={language}
-						value={language}
-						checked={selectedLanguages.includes(language)}
+						value={language.value}
+						checked={selectedLanguages.includes(language.value)}
 						onChange={handleLanguageSelect}
 					/>
-					{language}
+					{language.label}
 				</label>
 			))}
 		</div>

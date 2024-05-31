@@ -7,8 +7,10 @@ import NameInitialSelector from "@/components/nameInitSelector";
 import GenderSelector from "@/components/genderSelect";
 import LanguageMultiSelect from "@/components/langMultiSelect";
 import QualityMultiSelect from "@/components/qualityMultiSelect";
+import filterNames from "../lib/filterName";
+import NameCard from "@/components/nameCard";
 
-interface Name {
+export interface Name {
 	name: string;
 	gender: string;
 	languages: string[];
@@ -16,144 +18,91 @@ interface Name {
 	origin: string;
 	qualities: string[];
 }
-export default function Home() {
-	const [nameData, setNameData] = useState<Name[]>(namesData);
-	const [selectedInitial, setSelectedInitial] = useState<string>("");
-	const [selectedGender, setSelectedGender] = useState<string>("");
-	const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-	const [selectedQualities, setSelectedQualities] = useState<string[]>([]);
-	const router = useRouter();
-	const urlParams = useSearchParams();
 
-	// set values from url
-	useEffect(() => {
-		// Apply filters from the URL on initial load
-		const initial = urlParams?.get("initial");
-		const gender = urlParams?.get("gender");
-		const languages = urlParams?.get("languages");
-		const qualities = urlParams?.get("qualities");
+export interface FilterState {
+	initial: string;
+	gender: string;
+	languages: string[];
+	qualities: string[];
+}
 
-		setSelectedInitial(typeof initial === "string" ? initial : "");
-		setSelectedGender(typeof gender === "string" ? gender : "");
-		setSelectedLanguages(
-			typeof languages === "string"
-				? [languages]
-				: Array.isArray(languages)
-					? languages
-					: [],
-		);
-		setSelectedQualities(
-			typeof qualities === "string"
-				? [qualities]
-				: Array.isArray(qualities)
-					? qualities
-					: [],
-		);
-	}, [urlParams]);
+export default function HomePage() {
+	const searchParams = useSearchParams();
 
-	// update nameData
-	useEffect(
-		() => {
-			// Filter the data based on the selected filters
-			// setNameData(namesData);
-			const filteredData = namesData.filter((name) => {
-				const matchesInitial = selectedInitial
-					? name.name[0].toLowerCase() === selectedInitial.toLowerCase()
-					: true;
-				const matchesGender = selectedGender
-					? name.gender.toLowerCase() === selectedGender.toLowerCase()
-					: true;
-				const matchesLanguages = selectedLanguages.length
-					? selectedLanguages.every((language) =>
-						name.languages.includes(language),
-					)
-					: true;
-				const matchesQualities = selectedQualities.length
-					? selectedQualities.every((quality) =>
-						name.qualities.includes(quality),
-					)
-					: true;
-				return (
-					matchesInitial &&
-					matchesGender &&
-					matchesLanguages &&
-					matchesQualities
-				);
-			});
-			setNameData(filteredData);
-		},
-		[selectedInitial, selectedGender, selectedLanguages, selectedQualities],
-		// [urlParams]
+	const initialInitial = searchParams.get("initial") || "";
+	const initialGender = searchParams.get("gender") || "";
+	const initialLanguages = searchParams.getAll("languages") || [];
+	const initialQualities = searchParams.getAll("qualities") || [];
+
+	// Initialize the filter state from the URL on every render
+	const [filters, setFilters] = useState<FilterState>({
+		initial: initialInitial,
+		gender: initialGender,
+		languages: initialLanguages,
+		qualities: initialQualities,
+	});
+
+	// Filter names based on initial filter values
+	const [filteredNames, setFilteredNames] = useState<Name[]>(
+		filterNames(namesData, filters),
 	);
 
-	// update url
 	useEffect(() => {
-		// Update the URL with the selected filters
-		const searchParams = new URLSearchParams();
-		if (selectedInitial) searchParams.set("initial", selectedInitial);
-		if (selectedGender) searchParams.set("gender", selectedGender);
-		if (selectedLanguages.length)
-			searchParams.set("languages", selectedLanguages.join(","));
-		if (selectedQualities.length)
-			searchParams.set("qualities", selectedQualities.join(","));
-		router.push(`?${searchParams.toString()}`);
-	}, [
-		selectedInitial,
-		selectedGender,
-		selectedLanguages,
-		selectedQualities,
-		// router,
-	]);
+		const newSearchParams = new URLSearchParams();
+		if (filters.initial !== "") newSearchParams.set("initial", filters.initial);
+		if (filters.gender !== "") newSearchParams.set("gender", filters.gender);
 
-	const handleInitialSelect = (initial: string) => {
-		setSelectedInitial(initial);
+		// Handle multiple values for languages and qualities
+		filters.languages.forEach((lang) =>
+			newSearchParams.append("languages", lang),
+		);
+		filters.qualities.forEach((quality) =>
+			newSearchParams.append("qualities", quality),
+		);
+
+		// Only update the URL if it has changed
+		if (newSearchParams.toString() !== searchParams.toString()) {
+			setFilteredNames(filterNames(namesData, filters));
+			window.history.replaceState(
+				null,
+				"",
+				`${window.location.pathname}?${newSearchParams}`,
+			);
+		}
+	}, [filters]);
+
+	const handleFilterChange = (newFilters: Partial<FilterState>) => {
+		setFilters((prevFilters) => ({
+			...prevFilters,
+			...newFilters,
+		}));
+		console.log(filters);
 	};
-
-	const handleGenderSelect = (gender: string) => {
-		setSelectedGender(gender);
-	};
-
-	const handleLanguagesSelect = (languages: string[]) => {
-		setSelectedLanguages(languages);
-	};
-
-	const handleQualitiesSelect = (qualities: string[]) => {
-		setSelectedQualities(qualities);
-	};
-
-	const clearAllFilters = () => {
-		setSelectedInitial("");
-		setSelectedGender("");
-		setSelectedLanguages([]);
-		setSelectedQualities([]);
-	};
-
 	return (
 		<div>
-			{/* Render the selector components */}
 			<NameInitialSelector
-				selectedInitial={selectedInitial}
-				onInitialSelect={setSelectedInitial}
+				selectedInitial={filters.initial}
+				onInitialSelect={(initial) => handleFilterChange({ initial })}
 			/>
 			<GenderSelector
-				selectedGender={selectedGender}
-				onGenderSelect={setSelectedGender}
+				selectedGender={filters.gender}
+				onGenderSelect={(gender) => handleFilterChange({ gender })}
 			/>
 			<LanguageMultiSelect
-				selectedLanguages={selectedLanguages}
-				onLanguagesSelect={setSelectedLanguages}
+				selectedLanguages={filters.languages}
+				onLanguagesSelect={(languages) => handleFilterChange({ languages })}
 			/>
 			<QualityMultiSelect
-				selectedQualities={selectedQualities}
-				onQualitiesSelect={setSelectedQualities}
+				selectedQualities={filters.qualities}
+				onQualitiesSelect={(qualities) => handleFilterChange({ qualities })}
 			/>
-			{
-				nameData.length > 0 ? (
-					nameData.map((name) => (
-						// render full name values
-						<div key={name.name}>{name.name}</div>
-					))) :
-					(<div>Loading..</div>)}
+
+			{/* Render filtered names */}
+			<div>
+				{filteredNames.map((name) => (
+					<NameCard key={name.name} name={name} />
+				))}
+			</div>
 		</div>
 	);
 }
