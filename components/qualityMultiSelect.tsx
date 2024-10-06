@@ -1,5 +1,6 @@
 // QualityMultiSelect.tsx
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import { MultiSelect } from './ui/multi-select';
 
 interface QualityMultiSelectProps {
 	selectedQualities: string[];
@@ -11,35 +12,38 @@ const QualityMultiSelect: React.FC<QualityMultiSelectProps> = ({
 	onQualitiesSelect,
 }) => {
 	const allQualities = [
-		'Gentle', 'Ambitious', 'Curious', 'Empathetic', 'Resilient', 'Joyful', 'Thoughtful',
-		'Dependable', 'Innovative', 'Confident', 'Nurturing', 'Adventurous', 'Honest', 'Elegant',
-		'Passionate',
+		// 'Gentle', 'Ambitious', 'Curious', 'Empathetic', 'Resilient', 'Joyful', 'Thoughtful',
+		// 'Dependable', 'Innovative', 'Confident', 'Nurturing', 'Adventurous', 'Honest', 'Elegant',
+		// 'Passionate',
+		{id: "gentle", value: "Gentle", label: "Gentle"},
+		{id: "ambitious", value: "Ambitious", label: "Ambitious"},
 	];
 
-	const handleQualitySelect = (event: ChangeEvent<HTMLInputElement>) => {
-		const { value, checked } = event.target;
-		if (checked) {
-			onQualitiesSelect(Array.from(new Set([...selectedQualities, value])));
-		} else {
-			onQualitiesSelect(selectedQualities.filter((quality) => quality !== value));
-		}
-	};
+	const [_, setSelectedQualities] = useState<string[]>([]);
+
+	const handleQualitySelection = (selectedQualities: string[]) => {
+		setSelectedQualities(selectedQualities);
+		onQualitiesSelect(selectedQualities);
+	}
 
 	return (
 		<div>
-			{allQualities.map((quality) => (
-				<label key={quality}>
-					<input
-						type="checkbox"
-						id={quality}
-						value={quality}
-						checked={selectedQualities.includes(quality)}
-						onChange={handleQualitySelect}
+			<div>
+				<div className="p-4 max-w-xl">
+					<MultiSelect
+						options={allQualities}
+						onValueChange={handleQualitySelection}
+						defaultValue={selectedQualities}
+						placeholder="Select qualities"
+						variant="inverted"
+						animation={0}
+						maxCount={3}
 					/>
-					{quality}
-				</label>
-			))}
+				</div>
+			</div>
 		</div>
+
+
 	);
 };
 

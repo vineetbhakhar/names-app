@@ -7,6 +7,7 @@ import NameInitialSelector from "@/components/nameInitSelector";
 import GenderSelector from "@/components/genderSelect";
 import LanguageMultiSelect from "@/components/langMultiSelect";
 import QualityMultiSelect from "@/components/qualityMultiSelect";
+import Filters from "@/components/filters";
 import filterNames from "../lib/filterName";
 import NameCard from "@/components/nameCard";
 
@@ -80,14 +81,22 @@ export default function HomePage() {
 	};
 	return (
 		<div>
-			<NameInitialSelector
-				selectedInitial={filters.initial}
-				onInitialSelect={(initial) => handleFilterChange({ initial })}
-			/>
-			<GenderSelector
+			<Filters filters= {filters} handleFilterChange= {handleFilterChange}/>
+			{/* <div className='flex w-60 p-4 items-center'>
+				<div className="p-2">Initial: </div>
+				
+				<NameInitialSelector
+					selectedInitial={filters.initial}
+					onInitialSelect={(initial) => handleFilterChange({ initial })}
+				/>
+			</div>
+			<div className='flex w-60 p-4 items-center '>
+			<div className="p-2">Gender: </div>
+				<GenderSelector
 				selectedGender={filters.gender}
 				onGenderSelect={(gender) => handleFilterChange({ gender })}
 			/>
+			</div>
 			<LanguageMultiSelect
 				selectedLanguages={filters.languages}
 				onLanguagesSelect={(languages) => handleFilterChange({ languages })}
@@ -95,7 +104,7 @@ export default function HomePage() {
 			<QualityMultiSelect
 				selectedQualities={filters.qualities}
 				onQualitiesSelect={(qualities) => handleFilterChange({ qualities })}
-			/>
+			/> */}
 
 			{/* Render filtered names */}
 			<div>

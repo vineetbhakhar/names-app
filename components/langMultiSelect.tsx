@@ -1,5 +1,8 @@
 // LanguageMultiSelect.tsx
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import { Checkbox } from "@/components/ui/checkbox"
+import { MultiSelect } from './ui/multi-select';
+
 
 interface LanguageMultiSelectProps {
 	selectedLanguages: string[];
@@ -12,12 +15,13 @@ const allLanguages = [
 	// ... other language options
 ];
 
-const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
+const LanguageMultiSelect = ({
 	selectedLanguages,
-	onLanguagesSelect,
-}) => {
-	const handleLanguageSelect = (event: ChangeEvent<HTMLInputElement>) => {
-		const { value, checked } = event.target;
+	onLanguagesSelect
+}: LanguageMultiSelectProps
+) => {
+	const handleLanguageSelect = (value: string, checked: string | boolean) => {
+		// const { value, checked } = event.target;
 		onLanguagesSelect(
 			checked
 				? [...selectedLanguages, value]
@@ -25,19 +29,28 @@ const LanguageMultiSelect: React.FC<LanguageMultiSelectProps> = ({
 		);
 	};
 
+	
+	const [_, setSelectedLanguages] = useState<string[]>([]);
+	
+	const handleLanguageSelection = (langs : string[]) => {
+		setSelectedLanguages(langs);
+		onLanguagesSelect(langs);
+	}
+
 	return (
 		<div>
-			{allLanguages.map((language) => (
-				<label key={language.id}>
-					<input
-						type="checkbox"
-						value={language.value}
-						checked={selectedLanguages.includes(language.value)}
-						onChange={handleLanguageSelect}
-					/>
-					{language.label}
-				</label>
-			))}
+			<div className="p-4 max-w-xl">
+				<MultiSelect
+					options={allLanguages}
+					// onValueChange={setSelectedLanguages}
+					onValueChange={handleLanguageSelection}
+					defaultValue={selectedLanguages}
+					placeholder="Select languages"
+					variant="inverted"
+					animation={0}
+					maxCount={3}
+				/>
+			</div>
 		</div>
 	);
 };

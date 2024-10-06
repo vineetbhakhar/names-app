@@ -1,25 +1,43 @@
-// NameInitialSelector.tsx
-import React, { ChangeEvent } from 'react';
+import React from 'react';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectGroup,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 interface NameInitialSelectorProps {
-	selectedInitial: string;
-	onInitialSelect: (initial: string) => void;
+    selectedInitial: string;
+    onInitialSelect: (initial: string) => void; 
 }
 
 const allInitials = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)); // A-Z
 
-const NameInitialSelector: React.FC<NameInitialSelectorProps> = ({
-	selectedInitial,
-	onInitialSelect,
-}) => (
-	<select value={selectedInitial} onChange={(e) => onInitialSelect(e.target.value)}>
-		<option value="">All Initials</option>
-		{allInitials.map((initial) => (
-			<option key={initial} value={initial}>
-				{initial}
-			</option>
-		))}
-	</select>
-);
+const NameInitialSelector = ({
+    selectedInitial,
+    onInitialSelect,
+}:NameInitialSelectorProps) => {
+    return (
+		<div>
+        <Select value={selectedInitial} onValueChange={onInitialSelect}>
+            <SelectTrigger className="w-180">
+                <SelectValue placeholder="Select initial" />
+            </SelectTrigger>
+            <SelectContent>
+                <SelectGroup>
+                    <SelectItem value="All">All Initials</SelectItem>
+                    {allInitials.map((initial) => (
+                        <SelectItem key={initial} value={initial}>
+                            {initial}
+                        </SelectItem>
+                    ))}
+                </SelectGroup>
+            </SelectContent>
+        </Select>
+		</div>
+    );
+};
 
 export default NameInitialSelector;

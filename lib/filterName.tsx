@@ -7,10 +7,10 @@ function filterNames(names: Name[], filters: FilterState): Name[] {
     quality.toLowerCase(),
   ); // Convert qualities to lowercase for comparison
   const filterGender = filters.gender.toLowerCase(); // Convert gender to lowercase for comparison
-
+  console.log(filterInitial);
   return names.filter((name) => {
     const initialMatch =
-      filterInitial === "" || name.name.toLowerCase().startsWith(filterInitial);
+      filterInitial === "all" || name.name.toLowerCase().startsWith(filterInitial);
     const genderMatch =
       filterGender === "" || name.gender.toLowerCase() === filterGender;
     const languageMatch =
@@ -23,7 +23,6 @@ function filterNames(names: Name[], filters: FilterState): Name[] {
       filterQualities.some((quality) =>
         name.qualities.map((q) => q.toLowerCase()).includes(quality),
       );
-
     return initialMatch && genderMatch && languageMatch && qualitiesMatch;
   });
 }

@@ -1,4 +1,12 @@
 import React, { ChangeEvent } from "react";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectGroup,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select"
 
 interface GenderSelectorProps {
 	selectedGender: string;
@@ -11,21 +19,27 @@ const genderOptions = [
 	{ id: "female", value: "Female", label: "Female" },
 ];
 
-const GenderSelector: React.FC<GenderSelectorProps> = ({
+const GenderSelector = ({
 	selectedGender,
 	onGenderSelect,
-}) => {
+}: GenderSelectorProps) => {
 	return (
-		<select
+		<Select
 			value={selectedGender}
-			onChange={(e) => onGenderSelect(e.target.value)}
-		>
-			{genderOptions.map((option) => (
-				<option key={option.id} value={option.value}>
-					{option.label}
-				</option>
-			))}
-		</select>
+			onValueChange={(e) => onGenderSelect(e)}>
+			<SelectTrigger className="w-[180px]">
+				<SelectValue placeholder="Select gender" />
+			</SelectTrigger>
+			<SelectContent>
+				<SelectGroup>
+					{genderOptions.map((option) => (
+						<SelectItem key={option.id} value={option.label}>
+							{option.label}
+						</SelectItem>
+					))}
+				</SelectGroup>
+			</SelectContent>
+		</Select>
 	);
 };
 
