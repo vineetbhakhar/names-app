@@ -5,6 +5,7 @@ import { MultiSelect } from './ui/multi-select';
 
 
 interface LanguageMultiSelectProps {
+	label: string,
 	selectedLanguages: string[];
 	onLanguagesSelect: (languages: string[]) => void;
 }
@@ -16,6 +17,7 @@ const allLanguages = [
 ];
 
 const LanguageMultiSelect = ({
+	label,
 	selectedLanguages,
 	onLanguagesSelect
 }: LanguageMultiSelectProps
@@ -39,6 +41,7 @@ const LanguageMultiSelect = ({
 
 	return (
 		<div>
+			<div>{label}</div>
 			<div className="p-4 max-w-xl">
 				<MultiSelect
 					options={allLanguages}

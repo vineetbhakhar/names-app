@@ -3,14 +3,16 @@ import React, { ChangeEvent, useState } from 'react';
 import { MultiSelect } from './ui/multi-select';
 
 interface QualityMultiSelectProps {
+	label: string,
 	selectedQualities: string[];
 	onQualitiesSelect: (qualities: string[]) => void;
 }
 
 const QualityMultiSelect: React.FC<QualityMultiSelectProps> = ({
+	label,
 	selectedQualities,
 	onQualitiesSelect,
-}) => {
+}: QualityMultiSelectProps) => {
 	const allQualities = [
 		// 'Gentle', 'Ambitious', 'Curious', 'Empathetic', 'Resilient', 'Joyful', 'Thoughtful',
 		// 'Dependable', 'Innovative', 'Confident', 'Nurturing', 'Adventurous', 'Honest', 'Elegant',
@@ -28,6 +30,7 @@ const QualityMultiSelect: React.FC<QualityMultiSelectProps> = ({
 
 	return (
 		<div>
+			<div>{label}</div>
 			<div>
 				<div className="p-4 max-w-xl">
 					<MultiSelect

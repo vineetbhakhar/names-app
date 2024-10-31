@@ -1,117 +1,131 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import namesData from "../assets/data/names.json";
 import NameInitialSelector from "@/components/nameInitSelector";
 import GenderSelector from "@/components/genderSelect";
 import LanguageMultiSelect from "@/components/langMultiSelect";
 import QualityMultiSelect from "@/components/qualityMultiSelect";
-import Filters from "@/components/filters";
-import filterNames from "../lib/filterName";
 import NameCard from "@/components/nameCard";
+import filterNames from "../lib/filterName";
 
 export interface Name {
-	name: string;
-	gender: string;
-	languages: string[];
-	meaning: string;
-	origin: string;
-	qualities: string[];
+  name: string;
+  gender: string;
+  languages: string[];
+  meaning: string;
+  origin: string;
+  qualities: string[];
 }
 
 export interface FilterState {
-	initial: string;
-	gender: string;
-	languages: string[];
-	qualities: string[];
+  initial: string;
+  gender: string;
+  languages: string[];
+  qualities: string[];
 }
 
 export default function HomePage() {
-	const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
+  const [filters, setFilters] = useState<FilterState>(getInitialFilters(searchParams));
+  const [filteredNames, setFilteredNames] = useState<Name[]>(() => filterNames(namesData, filters));
 
-	const initialInitial = searchParams.get("initial") || "";
-	const initialGender = searchParams.get("gender") || "";
-	const initialLanguages = searchParams.getAll("languages") || [];
-	const initialQualities = searchParams.getAll("qualities") || [];
+  useEffect(() => {
+    updateURL(filters);
+    setFilteredNames(filterNames(namesData, filters));
+  }, [filters]);
 
-	// Initialize the filter state from the URL on every render
-	const [filters, setFilters] = useState<FilterState>({
-		initial: initialInitial,
-		gender: initialGender,
-		languages: initialLanguages,
-		qualities: initialQualities,
-	});
+  const handleFilterChange = (newFilters: Partial<FilterState>) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      ...newFilters,
+    }));
+  };
 
-	// Filter names based on initial filter values
-	const [filteredNames, setFilteredNames] = useState<Name[]>(
-		filterNames(namesData, filters),
-	);
+  return (
+    <div>
+      <FilterSection filters={filters} onFilterChange={handleFilterChange} />
+      <NameList names={filteredNames} />
+    </div>
+  );
+}
 
-	useEffect(() => {
-		const newSearchParams = new URLSearchParams();
-		if (filters.initial !== "") newSearchParams.set("initial", filters.initial);
-		if (filters.gender !== "") newSearchParams.set("gender", filters.gender);
+function getInitialFilters(searchParams: URLSearchParams): FilterState {
+  return {
+    initial: searchParams.get("initial") || "",
+    gender: searchParams.get("gender") || "",
+    languages: searchParams.getAll("languages"),
+    qualities: searchParams.getAll("qualities"),
+  };
+}
 
-		// Handle multiple values for languages and qualities
-		filters.languages.forEach((lang) =>
-			newSearchParams.append("languages", lang),
-		);
-		filters.qualities.forEach((quality) =>
-			newSearchParams.append("qualities", quality),
-		);
+function updateURL(filters: FilterState) {
+  const newSearchParams = new URLSearchParams();
+  if (filters.initial) newSearchParams.set("initial", filters.initial);
+  if (filters.gender) newSearchParams.set("gender", filters.gender);
+  filters.languages.forEach((lang) => newSearchParams.append("languages", lang));
+  filters.qualities.forEach((quality) => newSearchParams.append("qualities", quality));
 
-		// Only update the URL if it has changed
-		if (newSearchParams.toString() !== searchParams.toString()) {
-			setFilteredNames(filterNames(namesData, filters));
-			window.history.replaceState(
-				null,
-				"",
-				`${window.location.pathname}?${newSearchParams}`,
-			);
-		}
-	}, [filters]);
+  // replaces the current URL with the new one
+  window.history.replaceState(
+    null,
+    "",
+    `${window.location.pathname}?${newSearchParams}`
+  );
+}
 
-	const handleFilterChange = (newFilters: Partial<FilterState>) => {
-		setFilters((prevFilters) => ({
-			...prevFilters,
-			...newFilters,
-		}));
-		console.log(filters);
-	};
-	return (
-		<div>
-			<Filters filters= {filters} handleFilterChange= {handleFilterChange}/>
-			{/* <div className='flex w-60 p-4 items-center'>
-				<div className="p-2">Initial: </div>
-				
-				<NameInitialSelector
-					selectedInitial={filters.initial}
-					onInitialSelect={(initial) => handleFilterChange({ initial })}
-				/>
-			</div>
-			<div className='flex w-60 p-4 items-center '>
-			<div className="p-2">Gender: </div>
-				<GenderSelector
-				selectedGender={filters.gender}
-				onGenderSelect={(gender) => handleFilterChange({ gender })}
-			/>
-			</div>
-			<LanguageMultiSelect
-				selectedLanguages={filters.languages}
-				onLanguagesSelect={(languages) => handleFilterChange({ languages })}
-			/>
-			<QualityMultiSelect
-				selectedQualities={filters.qualities}
-				onQualitiesSelect={(qualities) => handleFilterChange({ qualities })}
-			/> */}
+interface FilterSectionProps {
+  filters: FilterState;
+  onFilterChange: (newFilters: Partial<FilterState>) => void;
+}
 
-			{/* Render filtered names */}
-			<div>
-				{filteredNames.map((name) => (
-					<NameCard key={name.name} name={name} />
-				))}
-			</div>
-		</div>
-	);
+function FilterSection({ filters, onFilterChange }: FilterSectionProps) {
+  return (
+    <>
+      <FilterItem>
+        <NameInitialSelector
+			label="Initial"
+          selectedInitial={filters.initial}
+          onInitialSelect={(initial) => onFilterChange({ initial })}
+        />
+      </FilterItem>
+      <FilterItem>
+        <GenderSelector
+			label="Gender"
+          selectedGender={filters.gender}
+          onGenderSelect={(gender) => onFilterChange({ gender })}
+        />
+      </FilterItem>
+      <LanguageMultiSelect
+		label="Languages"
+        selectedLanguages={filters.languages}
+        onLanguagesSelect={(languages) => onFilterChange({ languages })}
+      />
+      <QualityMultiSelect
+		label="Qualities"
+        selectedQualities={filters.qualities}
+        onQualitiesSelect={(qualities) => onFilterChange({ qualities })}
+      />
+    </>
+  );
+}
+
+function FilterItem({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex w-60 p-4 items-center">
+      {children}
+    </div>
+  );
+}
+
+
+function NameList({ names }: { names: Name[] }) {
+  return (
+    <div>
+      {names.map((name) => (
+        <NameCard key={name.name} name={name} />
+      ))}
+    </div>
+  );
 }

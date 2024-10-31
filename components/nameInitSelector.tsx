@@ -9,18 +9,20 @@ import {
 } from "@/components/ui/select"
 
 interface NameInitialSelectorProps {
+    label: string;
     selectedInitial: string;
     onInitialSelect: (initial: string) => void; 
 }
-
 const allInitials = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)); // A-Z
 
 const NameInitialSelector = ({
+    label,
     selectedInitial,
     onInitialSelect,
-}:NameInitialSelectorProps) => {
+}: NameInitialSelectorProps) => {
     return (
 		<div>
+            <div>{label}</div>
         <Select value={selectedInitial} onValueChange={onInitialSelect}>
             <SelectTrigger className="w-180">
                 <SelectValue placeholder="Select initial" />
@@ -38,6 +40,4 @@ const NameInitialSelector = ({
         </Select>
 		</div>
     );
-};
-
-export default NameInitialSelector;
+};export default NameInitialSelector;
