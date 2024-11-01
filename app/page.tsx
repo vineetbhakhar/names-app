@@ -2,8 +2,6 @@ import FilterSection, { Filters } from "@/components/filterSection";
 import NameCard from "@/components/nameCard";
 import namesData from "../assets/data/names.json";
 import filterNames from "../lib/filterName";
-import { Filter } from "lucide-react";
-import { init } from "next/dist/compiled/webpack/webpack";
 
 export interface Name {
   name: string;
