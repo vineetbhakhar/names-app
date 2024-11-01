@@ -7,7 +7,7 @@ import LanguageMultiSelect from "./langMultiSelect";
 import QualityMultiSelect from "./qualityMultiSelect";
 
 
-export interface Filters {
+export type Filters = {
     initial: string;
     gender: string;
     languages: string[];
@@ -31,13 +31,11 @@ function FilterSection() {
     const router = useRouter();
   
     const updatesFilters = (newFilter: Partial<Filters>) => {
-        // use filter object to update filters
         if (newFilter.initial) filters.initial = newFilter.initial;
         if (newFilter.gender) filters.gender = newFilter.gender;
-        // prevent duplicates in languages and qualities while adding
-        if (newFilter.languages) filters.languages = [...new Set([...filters.languages, ...newFilter.languages])];
-        if (newFilter.qualities) filters.qualities = [...new Set([...filters.qualities, ...newFilter.qualities])];
-        console.log(filters);
+        if (newFilter.languages) filters.languages = newFilter.languages;
+        if (newFilter.qualities) filters.qualities = newFilter.qualities;
+        console.log("updating filters:", filters);
         updateUrl(filters);
     }
     const updateUrl = (filter: Filters) => {
@@ -45,8 +43,12 @@ function FilterSection() {
       
       if (filter.initial) newSearchParams.append("initial", filter.initial);
       if (filter.gender) newSearchParams.append("gender", filter.gender);
-      if (filter.languages.length > 0) newSearchParams.append("languages", filter.languages.join(","));
-      if (filter.qualities.length > 0) newSearchParams.append("qualities", filter.qualities.join(","));
+      if (filters.languages.length > 0) {
+        filters.languages.forEach(lang => newSearchParams.append("languages", lang)); 
+      }
+      if (filter.qualities.length > 0) {
+        filter.qualities.forEach(qual => newSearchParams.append("qualities", qual));
+      }
 
       console.log(newSearchParams.toString());
       router.replace(window.location.pathname + '?' + newSearchParams.toString());

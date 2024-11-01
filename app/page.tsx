@@ -1,9 +1,9 @@
 import FilterSection, { Filters } from "@/components/filterSection";
 import NameCard from "@/components/nameCard";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 import namesData from "../assets/data/names.json";
 import filterNames from "../lib/filterName";
+import { Filter } from "lucide-react";
+import { init } from "next/dist/compiled/webpack/webpack";
 
 export interface Name {
   name: string;
@@ -17,20 +17,45 @@ export interface Name {
 
 
 export default async function HomePage(props: {
-  searchParams?: Promise<Filters>;
+  searchParams?: Promise<{ initial?: string, gender?: string, languages?: string| string[], qualities?: string | string[] }>;
 }
 ) {
-  const searchParams = await props.searchParams;
+  const rawSearchParams = await props.searchParams; // Get the raw search parameters
+  console.log("rawSearchParams:", rawSearchParams);
 
+  const parsedSearchParams = parseSearchParams(rawSearchParams);
 
+  console.log("parsedSearchParams:", parsedSearchParams);
   return (
     <div>
       <FilterSection />
-      <FilteredNamesList query={searchParams} />
+      {/* <FilteredNamesList query={parsedSearchParams} /> */}
+      <FilteredNamesList query={parsedSearchParams} />
     </div>
   );
 }
 
+function parseSearchParams(params?: { initial?: string, gender?: string, languages?: string| string[], qualities?: string | string[] }) : Filters{
+  if (!params) return {initial: "", gender: "", languages: [], qualities: []};
+  var langs: string[], quals : string[];
+  if (Array.isArray(params.languages)){
+    langs = params.languages;
+  } else {
+    langs = params?.languages ? [params.languages] : [];
+  }
+
+  if (Array.isArray(params.qualities)){
+    quals = params.qualities;
+  } else {
+    quals = params?.qualities ? [params.qualities] : [];
+  }
+  return {
+    initial: params?.initial || "",
+    gender: params?.gender || "",
+    languages: langs,
+    qualities: quals
+  }
+}
 
 
 
@@ -45,11 +70,11 @@ function NameList({ names }: { names: Name[] }) {
   );
 }
 
-interface FilteredNamesListProps{
+interface FilteredNamesListProps {
   query?: Filters
 }
 function FilteredNamesList(props: FilteredNamesListProps) {
-  
+
   const names = filterNames(namesData, props.query);
   return (
     <NameList names={names} />
