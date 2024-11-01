@@ -1,14 +1,21 @@
-import { Name, FilterState } from "../app/page";
+import { Name } from "@/app/page";
+import { Filters } from "@/components/filterSection";
 
-function filterNames(names: Name[], filters: FilterState): Name[] {
-  const filterInitial = filters.initial.toLowerCase(); // Convert initial to lowercase for comparison
-  const filterLanguages = filters.languages.map((lang) => lang.toLowerCase()); // Convert languages to lowercase for comparison
-  const filterQualities = filters.qualities.map((quality) =>
-    quality.toLowerCase(),
-  ); // Convert qualities to lowercase for comparison
-  const filterGender = filters.gender.toLowerCase(); // Convert gender to lowercase for comparison
-  console.log(filterInitial);
-  return names.filter((name) => {
+
+
+function filterNames(names: Name[], filters?: Filters): Name[] {
+  console.log("filters for names:", filters);
+  const filterInitial = filters?.initial?.toLowerCase() || ""; // Convert initial to lowercase for comparison
+  const filterGender = filters?.gender?.toLowerCase() || ""; // Convert gender to lowercase for comparison
+  const filterLanguages = Array.isArray(filters?.languages)
+    ? filters?.languages.map((lang) => lang.toLowerCase())
+    : [];  // Convert languages to lowercase for comparison
+  const filterQualities = Array.isArray(filters?.qualities)
+    ? filters.qualities.map((quality) => quality.toLowerCase())
+    : []; // Convert qualities to lowercase for comparison
+
+  console.log(filterInitial, filterGender, filterLanguages, filterQualities);
+  const filteredNames = names.filter((name) => {
     const initialMatch =
       filterInitial === "all" || name.name.toLowerCase().startsWith(filterInitial);
     const genderMatch =
@@ -16,15 +23,22 @@ function filterNames(names: Name[], filters: FilterState): Name[] {
     const languageMatch =
       filterLanguages.length === 0 ||
       filterLanguages.some((lang) =>
-        name.languages.map((l) => l.toLowerCase()).includes(lang),
+        name.languages.some((l) => l.toLowerCase() === lang),
       );
     const qualitiesMatch =
       filterQualities.length === 0 ||
       filterQualities.some((quality) =>
-        name.qualities.map((q) => q.toLowerCase()).includes(quality),
+        name.qualities.some((q) => q.toLowerCase() === quality),
       );
-    return initialMatch && genderMatch && languageMatch && qualitiesMatch;
+    const isTrue = initialMatch && genderMatch && languageMatch && qualitiesMatch;
+    if (isTrue) {
+      console.log(name.name, initialMatch, genderMatch, languageMatch, qualitiesMatch);
+      console.log(name)
+    }
+    return isTrue;
   });
+  // console.log(filteredNames);
+  return filteredNames;
 }
 
 export default filterNames;
