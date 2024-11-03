@@ -15,7 +15,7 @@ export interface Name {
 
 
 export default async function HomePage(props: {
-  searchParams?: Promise<{ initial?: string, gender?: string, languages?: string| string[], qualities?: string | string[] }>;
+  searchParams?: Promise<{ initial?: string, gender?: string, languages?: string | string[], qualities?: string | string[] }>;
 }
 ) {
   const rawSearchParams = await props.searchParams; // Get the raw search parameters
@@ -25,24 +25,23 @@ export default async function HomePage(props: {
 
   console.log("parsedSearchParams:", parsedSearchParams);
   return (
-    <div>
+    <div className="mx-8 lg:mx-64 shadow-lg">
       <FilterSection />
-      {/* <FilteredNamesList query={parsedSearchParams} /> */}
       <FilteredNamesList query={parsedSearchParams} />
     </div>
   );
 }
 
-function parseSearchParams(params?: { initial?: string, gender?: string, languages?: string| string[], qualities?: string | string[] }) : Filters{
-  if (!params) return {initial: "", gender: "", languages: [], qualities: []};
-  var langs: string[], quals : string[];
-  if (Array.isArray(params.languages)){
+function parseSearchParams(params?: { initial?: string, gender?: string, languages?: string | string[], qualities?: string | string[] }): Filters {
+  if (!params) return { initial: "", gender: "", languages: [], qualities: [] };
+  var langs: string[], quals: string[];
+  if (Array.isArray(params.languages)) {
     langs = params.languages;
   } else {
     langs = params?.languages ? [params.languages] : [];
   }
 
-  if (Array.isArray(params.qualities)){
+  if (Array.isArray(params.qualities)) {
     quals = params.qualities;
   } else {
     quals = params?.qualities ? [params.qualities] : [];
@@ -75,6 +74,8 @@ function FilteredNamesList(props: FilteredNamesListProps) {
 
   const names = filterNames(namesData, props.query);
   return (
-    <NameList names={names} />
+    <div className="p-4">
+      <NameList names={names} />
+    </div>
   );
 }

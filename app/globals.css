@@ -75,3 +75,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .filter-selection {
+    @apply flex flex-col gap-2
+  }
+
+  .name-card {
+    @apply m-4 p-3
+  }
+}
