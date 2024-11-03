@@ -7,6 +7,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select"
+import { Label } from "./ui/label";
 
 interface GenderSelectorProps {
 	label: string;
@@ -30,17 +31,12 @@ const GenderSelector = ({
 	}
 
 	return (
-		<div>
-			<div>{label}</div>
+		<div className='filter-selection'>
+			<Label htmlFor='gender'>{label}</Label>
 			<Select
-				value={selectedGender}
-				onValueChange={(e) => {
-					if (e === null || e === undefined) {
-						throw new Error("onGenderSelect should not be null or undefined");
-					}
-					onGenderSelect(e);
-				}}>
-				<SelectTrigger className="w-[180px]">
+				defaultValue={selectedGender}
+				onValueChange={onGenderSelect}>
+				<SelectTrigger className="h-8">
 					<SelectValue placeholder="Select gender" />
 				</SelectTrigger>
 				<SelectContent>
