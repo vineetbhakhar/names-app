@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from "next/navigation";
-import NameCard from "./nameCard";
+import NameCard, { LoadingNameCard } from "./nameCard";
 import { Filters } from "./filterSection";
 import filterNames from "@/lib/filterName";
 import namesData from "../assets/data/names.json";
@@ -42,6 +42,16 @@ export default function FilteredNamesList() {
     return (
         <div className="p-4">
             <NameList names={names} />
+        </div>
+    );
+}
+
+export function FilteredNamesListLoading() {
+    return (
+        <div className="p-4">
+            <LoadingNameCard />
+            <LoadingNameCard />
+            <LoadingNameCard />
         </div>
     );
 }
