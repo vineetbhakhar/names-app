@@ -98,7 +98,6 @@ function FilterSection() {
   );
 }
 
-
 function FilterItem({ children }: { children: React.ReactNode }) {
   return (
     <div>

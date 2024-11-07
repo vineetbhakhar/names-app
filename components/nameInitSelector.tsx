@@ -22,7 +22,7 @@ const NameInitialSelector = ({
     onInitialSelect,
 }: NameInitialSelectorProps) => {
     return (
-        <div className="filter-selection">
+        <div className="flex flex-col gap-2">
             <Label htmlFor='initial'>{label}</Label>
             <Select defaultValue={selectedInitial} onValueChange={onInitialSelect} >
                 <SelectTrigger className="h-8">

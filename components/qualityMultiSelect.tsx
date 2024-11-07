@@ -23,7 +23,7 @@ const QualityMultiSelect: React.FC<QualityMultiSelectProps> = ({
 	];
 
 	return (
-		<div className='filter-selection'>
+		<div className='flex flex-col gap-2'>
 			<Label htmlFor='qualities'>{label}</Label>
 			<div>
 				<MultiSelect

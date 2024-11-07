@@ -1,4 +1,4 @@
-import { Name } from "@/app/page";
+import { Name } from "@/components/filteredNamesList";
 import { Filters } from "@/components/filterSection";
 
 
@@ -8,7 +8,7 @@ function filterNames(names: Name[], filters?: Filters): Name[] {
   const filterInitial = filters?.initial?.toLowerCase() || ""; // Convert initial to lowercase for comparison
   const filterGender = filters?.gender?.toLowerCase() || ""; // Convert gender to lowercase for comparison
   console.log("filters.languages:", filters?.languages, Array.isArray(filters?.languages)); // prints: filters.languages: Latin,English false
-  const filterLanguages = filters?.languages?.map(l => l.toLowerCase()) ;  // Convert languages to lowercase for comparison
+  const filterLanguages = filters?.languages?.map(l => l.toLowerCase());  // Convert languages to lowercase for comparison
   const filterQualities = filters?.qualities?.map(q => q.toLowerCase()) || [];
 
   console.log(filterInitial, filterGender, filterLanguages, filterQualities); // prints:   [] []
@@ -18,7 +18,7 @@ function filterNames(names: Name[], filters?: Filters): Name[] {
     const genderMatch =
       filterGender === "" || name.gender.toLowerCase() === filterGender;
     const languageMatch =
-      !filterLanguages ||filterLanguages.length === 0 ||
+      !filterLanguages || filterLanguages.length === 0 ||
       filterLanguages.some((lang) =>
         name.languages.some((l) => l.toLowerCase() === lang),
       );
