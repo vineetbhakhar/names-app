@@ -24,7 +24,7 @@ const LanguageMultiSelect = ({
 }: LanguageMultiSelectProps
 ) => {
 	return (
-		<div className='filter-selection'>
+		<div className='flex flex-col gap-2'>
 			<Label htmlFor='languages'>{label}</Label>
 			<MultiSelect
 				className="h-8"

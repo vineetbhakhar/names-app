@@ -5,6 +5,7 @@ import NameInitialSelector from "./nameInitSelector";
 import GenderSelector from "./genderSelect";
 import LanguageMultiSelect from "./langMultiSelect";
 import QualityMultiSelect from "./qualityMultiSelect";
+import { Skeleton } from "./ui/skeleton";
 
 
 export type Filters = {
@@ -98,11 +99,23 @@ function FilterSection() {
   );
 }
 
-
 function FilterItem({ children }: { children: React.ReactNode }) {
   return (
     <div>
       {children}
+    </div>
+  );
+}
+
+export function FilterSelectionLoading() {
+  return (
+    <div className="p-8 pt-4">
+      <div className="grid grid-cols-3 gap-4">
+        <Skeleton className="h-11 w-full"></Skeleton>
+        <Skeleton className="col-span-2 h-11 w-full"></Skeleton>
+        <Skeleton className="h-11 w-full"></Skeleton>
+        <Skeleton className="col-span-2 h-11 w-full"></Skeleton>
+      </div>
     </div>
   );
 }

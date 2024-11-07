@@ -1,81 +1,38 @@
-import FilterSection, { Filters } from "@/components/filterSection";
-import NameCard from "@/components/nameCard";
-import namesData from "../assets/data/names.json";
-import filterNames from "../lib/filterName";
-
-export interface Name {
-  name: string;
-  gender: string;
-  languages: string[];
-  meaning: string;
-  origin: string;
-  qualities: string[];
-}
-
-
+import FilterSection from "@/components/filterSection";
+import FilteredNamesList, { FilteredNamesListLoading } from "@/components/filteredNamesList";
+import { Suspense } from "react";
+import { FilterSelectionLoading } from "@/components/filterSection";
 
 export default async function HomePage(props: {
-  searchParams?: Promise<{ initial?: string, gender?: string, languages?: string | string[], qualities?: string | string[] }>;
+  searchParams: Promise<{ initial?: string, gender?: string, languages?: string | string[], qualities?: string | string[] }>;
 }
 ) {
-  const rawSearchParams = await props.searchParams; // Get the raw search parameters
-  console.log("rawSearchParams:", rawSearchParams);
-
-  const parsedSearchParams = parseSearchParams(rawSearchParams);
-
-  console.log("parsedSearchParams:", parsedSearchParams);
   return (
     <div className="mx-8 lg:mx-64 shadow-lg">
-      <FilterSection />
-      <FilteredNamesList query={parsedSearchParams} />
+      <Suspense fallback={<FilterSelectionLoading />}>
+        <FilterSection />
+      </Suspense>
+      <Suspense fallback={<FilteredNamesListLoading />}>
+        <FilteredNamesList />
+      </Suspense>
     </div>
   );
 }
 
-function parseSearchParams(params?: { initial?: string, gender?: string, languages?: string | string[], qualities?: string | string[] }): Filters {
-  if (!params) return { initial: "", gender: "", languages: [], qualities: [] };
-  var langs: string[], quals: string[];
-  if (Array.isArray(params.languages)) {
-    langs = params.languages;
-  } else {
-    langs = params?.languages ? [params.languages] : [];
-  }
-
-  if (Array.isArray(params.qualities)) {
-    quals = params.qualities;
-  } else {
-    quals = params?.qualities ? [params.qualities] : [];
-  }
-  return {
-    initial: params?.initial || "",
-    gender: params?.gender || "",
-    languages: langs,
-    qualities: quals
-  }
-}
-
-
-
-
-function NameList({ names }: { names: Name[] }) {
-  return (
-    <div>
-      {names.map((name) => (
-        <NameCard key={name.name} name={name} />
-      ))}
-    </div>
-  );
-}
-
-interface FilteredNamesListProps {
-  query?: Filters
-}
-function FilteredNamesList(props: FilteredNamesListProps) {
-
-  const names = filterNames(namesData, props.query);
-  return (
-    <div className="p-4">
-      <NameList names={names} />
-    </div>
-  );
-}
+/*
+    Gentle - Warm, soothing, and kind
+    Ambitious - Driven, determined, and goal-oriented
+    Curious - Inquisitive, eager to learn, and adventurous
+    Empathetic - Compassionate, understanding, and considerate
+    Resilient - Adaptable, strong-willed, and persevering
+    Joyful - Cheerful, optimistic, and light-hearted
+    Thoughtful - Reflective, insightful, and contemplative
+    Dependable - Reliable, trustworthy, and responsible
+    Innovative - Creative, imaginative, and pioneering
+    Confident - Self-assured, poised, and assertive
+    Nurturing - Caring, supportive, and maternal/paternal
+    Adventurous - Daring, risk-taking, and open to new experiences
+    Honest - Sincere, transparent, and truthful
+    Elegant - Graceful, refined, and sophisticated
+    Passionate - Enthusiastic, driven, and emotionally expressive
+    */

@@ -31,7 +31,7 @@ const GenderSelector = ({
 	}
 
 	return (
-		<div className='filter-selection'>
+		<div className='flex flex-col gap-2'>
 			<Label htmlFor='gender'>{label}</Label>
 			<Select
 				defaultValue={selectedGender}

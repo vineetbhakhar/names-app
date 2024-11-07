@@ -5,8 +5,9 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { Name } from "../app/page";
 import { Label } from "./ui/label";
+import { Name } from "./filteredNamesList";
+import { Skeleton } from "./ui/skeleton";
 
 
 interface NameCardProps {
@@ -16,7 +17,7 @@ interface NameCardProps {
 const NameCard = ({ name }: NameCardProps) => {
   return (
     <div className="">
-      <Card className="name-card shadow-md">
+      <Card className="m-4 p-3 shadow-md">
         <CardHeader>
           <CardTitle className="text-base">{name.name}</CardTitle>
           <CardDescription className="line-clamp-2">{name.meaning}</CardDescription>
@@ -46,5 +47,19 @@ const NameCard = ({ name }: NameCardProps) => {
     </div >
   );
 };
+
+export function LoadingNameCard() {
+  return (
+    <Card className="m-4 p-3 shadow-md">
+      <CardHeader>
+        <CardTitle className="text-base"><Skeleton className="h-8 w-1/2"></Skeleton></CardTitle>
+        <CardDescription className="line-clamp-2"><Skeleton className="h-10 w-full"></Skeleton></CardDescription>
+      </CardHeader>
+      <CardContent className="text-sm">
+        <Skeleton className="h-20"></Skeleton>
+      </CardContent>
+    </Card>
+  )
+}
 
 export default NameCard;
